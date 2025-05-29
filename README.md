@@ -4,7 +4,7 @@
 
 RENT is an unsupervised method for training reasoning LLMs by minimizing entropy. We demonstrate on a variety of datasets and models that RENT improves model performance without using any ground truth labels!
 
-RENT is featured in our paper *"Maximizing Confidence Alone Improves Reasoning"*
+RENT is featured in our paper *"Maximizing Confidence Alone Improves Reasoning"* ([link](https://arxiv.org/abs/2505.22660))
 
 RENT is built on top of the **[verl](https://github.com/volcengine/verl)** library.
 
@@ -44,3 +44,14 @@ We use an extensible config setup, allowing you to override default configuratio
 To define a custom configuration, create a new yaml file in `verl/trainer/config/exps`. **NOTE**: you MUST include `# @package _global_` at the beginning of the file in order to override other configs.
 
 To use different configuration files, simply add them to the `exps="[...]"` argument to `verl.trainer.main_ppo`. Note: configurations are applied from left-to-right order, so configs to the right will override configs to the left!
+
+## Citation
+
+```bibtex
+@article{prabhudesai2025rent,
+    title={Maximizing Confidence Alone Improves Reasoning},
+    author={Prabhudesai, Mihir and Chen, Lili and Ippoliti, Alex and Fragkiadaki, Katerina and Liu, Hao and Pathak, Deepak},
+    journal={arXiv preprint arXiv:2505.22660},
+    year={2025}
+}
+```
