@@ -68,33 +68,6 @@ from verl.utils.model import compute_position_id_with_mask
 
 WorkerType = Type[Worker]
 
-confidence_prompt = """
-Given the following question and your response (including thought process and answer), thoroughly assess your confidence in that answer by evaluating your thinking process so far.
-Then, after your thought process, classify your confidence into one of the following classes based on how likely your answer is to be correct:
-
-- "Almost no chance" (0.0–0.1)
-- "Highly unlikely" (0.1–0.2)
-- "Chances are slight" (0.2–0.3)
-- "Unlikely" (0.3–0.4)
-- "Less than even" (0.4–0.5)
-- "Better than even" (0.5–0.6)
-- "Likely" (0.6–0.7)
-- "Very good chance" (0.7–0.8)
-- "Highly likely" (0.8–0.9)
-- "Almost certain" (0.9–1.0)
-
-Each category reflects the probability that you are correct.
-
-Format your confidence as:
-**CONFIDENCE**: $CLASS
-Where $CLASS is one of the names (only the names without the probability ranges) of the classes above
-
-**Question**: {}
-
-**Answer**: {}
-
-"""
-
 
 class Role(Enum):
     """
@@ -893,13 +866,10 @@ class RayPPOTrainer:
         metrics.update(global_balance_stats)
     
     def extract_answer(self, data_source, response_str):
-        if "gsm8k" in data_source:
-            from verl.utils.reward_score import gsm8k
-            extracted_answer = gsm8k.extract_solution(response_str)
-        elif "gpqa" in data_source.lower() or "tal" in data_source.lower():
+        if "tal" in data_source.lower():
             from verl.utils.reward_score import gpqa
             extracted_answer = gpqa.extract_solution(response_str)
-        elif "math" in data_source.lower() or "aime" in data_source.lower() or "amc" in data_source.lower():
+        elif "math" in data_source.lower() or "aime" in data_source.lower() or "amc" in data_source.lower() or "gpqa" in data_source.lower() or "gsm8k" in data_source.lower():
             from verl.utils.reward_score import math
             try:
                 string_in_last_boxed = math.last_boxed_only_string(response_str)

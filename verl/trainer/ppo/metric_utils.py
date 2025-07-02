@@ -364,5 +364,26 @@ def process_validation_metrics(data_sources: list[str], sample_inputs: list[str]
     for data_source, var2metric2prompt_vals in data_src2var2metric2prompt_vals.items():
         for var_name, metric2prompt_vals in var2metric2prompt_vals.items():
             for metric_name, prompt_vals in metric2prompt_vals.items():
-                data_src2var2metric2val[data_source][var_name][metric_name] = np.mean(prompt_vals)
+                if metric_name.startswith("mean@"):  # aggregate means then compute std of means
+                    data_src2var2metric2val[data_source][var_name][metric_name] = np.mean(prompt_vals)
+                    
+                    # now std over those rollout-means:
+                    n = metric_name.split("@")[1]   # number of rollouts
+                    n = int(n)
+                    run_means = []
+                    for run_idx in range(n):
+                        # gather the run_idx'th score from each prompt
+                        vals_this_run = [
+                            var2vals[var_name][run_idx]
+                            for var2vals in data_src2prompt2var2vals[data_source].values()
+                        ]
+                        run_means.append(np.mean(vals_this_run))
+
+                    # now std over those rollout-means:
+                    data_src2var2metric2val[data_source][var_name][f"std@{n}"] = np.std(run_means)
+                elif metric_name.startswith("std@"):  # skip original per-prompt stds
+                    continue
+                else:  # average other metrics
+                    data_src2var2metric2val[data_source][var_name][metric_name] = np.mean(prompt_vals)
+
     return data_src2var2metric2val

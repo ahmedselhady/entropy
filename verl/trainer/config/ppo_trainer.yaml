@@ -251,4 +251,4 @@ trainer:
   entropy_plot: False
 
 ray_init:
-  num_cpus: 16 # `None` means using all CPUs, which might cause hang if limited in systems like SLURM. Please set to a number allowed then.
+  num_cpus: None # `None` means using all CPUs, which might cause hang if limited in systems like SLURM. Please set to a number allowed then.
