@@ -15,11 +15,7 @@
 
 
 def _default_compute_score(data_source, solution_str, ground_truth, extra_info=None):
-    if data_source == "openai/gsm8k":
-        from . import gsm8k
-
-        res = gsm8k.compute_score(solution_str, ground_truth)
-    elif data_source in ["lighteval/MATH", "DigitalLearningGmbH/MATH-lighteval", "HuggingFaceH4/MATH-500", "Maxwell-Jia/AIME_2024", "AI-MO/aimo-validation-amc"]:
+    if data_source in ["lighteval/MATH", "DigitalLearningGmbH/MATH-lighteval", "HuggingFaceH4/MATH-500", "Maxwell-Jia/AIME_2024", "AI-MO/aimo-validation-amc", "gpqa", "Idavidrein/gpqa", "openai/gsm8k"]:
         from . import math
 
         # res = math.compute_score(solution_str, ground_truth)
@@ -57,7 +53,7 @@ def _default_compute_score(data_source, solution_str, ground_truth, extra_info=N
         from . import countdown
 
         res = countdown.compute_score(solution_str, ground_truth)
-    elif data_source in ["gpqa", "Idavidrein/gpqa", "tal-scq5k", "math-eval/TAL-SCQ5K"]:
+    elif data_source in ["tal-scq5k", "math-eval/TAL-SCQ5K"]:
         from . import gpqa
     
         res = gpqa.compute_score(solution_str, ground_truth)
